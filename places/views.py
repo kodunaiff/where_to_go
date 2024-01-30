@@ -1,40 +1,36 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.template import loader
 from .models import Place
 
-def show_places(request):
 
-    places = {
+def show_places(request):
+    places = Place.objects.all()
+    features = []
+    for place in places:
+        points = {}
+        points['type'] = 'Feature'
+        points['geometry'] = {
+            "type": "Point",
+            "coordinates": [place.lng, place.lat]
+        }
+        points['properties'] = {
+            "title": place.title,
+            "placeId": "moscow_legends",
+            "detailsUrl": "static/places/moscow_legends.json"
+        }
+        features.append(points)
+
+    contex = {
         "type": "FeatureCollection",
-        "features": [
-            {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [37.62, 55.793676]
-                },
-                "properties": {
-                    "title": "«Легенды Москвы",
-                    "placeId": "moscow_legends",
-                    "detailsUrl": "static/places/moscow_legends.json"
-                }
-            },
-            {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [37.64, 55.753676]
-                },
-                "properties": {
-                    "title": "Крыши24.рф",
-                    "placeId": "roofs24",
-                    "detailsUrl": "static/places/roofs24.json"
-                }
-            }
-        ]
+        "features": features
     }
 
-    return render(request, 'index.html', {'places_geojson': places})
+    return render(request, 'index.html', {'places_geojson': contex})
 
-# Create your views here.
+
+def show_place_id(request, place_id):
+    obj = get_object_or_404(Place, pk=place_id)
+    place = obj.title
+
+    return HttpResponse(place)
