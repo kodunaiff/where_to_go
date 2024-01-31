@@ -1,5 +1,6 @@
+from django.core.serializers import json
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from .models import Place
 
@@ -30,7 +31,17 @@ def show_places(request):
 
 
 def show_place_id(request, place_id):
-    obj = get_object_or_404(Place, pk=place_id)
-    place = obj.title
+    place = get_object_or_404(Place, id=place_id)
+    place_imgs = [image.img.url for image in place.places.all()]
+    response_place = {
+        'title': place.title,
+        'imgs': place_imgs,
+        'description_short': place.description_short,
+        'description_long': place.description_long,
+        'coordinates': {
+            'lng': place.lng,
+            'lat': place.lat,
+        }
+    }
 
-    return HttpResponse(place)
+    return JsonResponse(response_place, safe=False, json_dumps_params={'ensure_ascii': False, 'indent': 2})
