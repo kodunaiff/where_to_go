@@ -17,10 +17,8 @@ class Image(models.Model):
     place = models.ForeignKey('Place', verbose_name='Место', on_delete=models.CASCADE, related_name='places')
     img = models.ImageField(upload_to='media/', verbose_name='Картинка', null=True, blank=True)
 
-
     def __str__(self):
         return f'{self.number_pic} {self.place}'
 
     class Meta:
-        ordering = ['place', 'number_pic']
-
+        ordering = ['number_pic', 'place']
