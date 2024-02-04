@@ -2,11 +2,21 @@ from django.contrib import admin
 from .models import Place, Image
 
 
+class ImageInline(admin.TabularInline):
+    model = Image
+
+
+@admin.register(Place)
 class PlaceAdmin(admin.ModelAdmin):
-    pass
+    list_display = (
+        'title', 'description_short',
+        'lat', 'lng',
+    )
+    inlines = [
+        ImageInline
+    ]
+
+
+@admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):
     pass
-
-admin.site.register(Place, PlaceAdmin)
-admin.site.register(Image, ImageAdmin)
-# Register your models here.
