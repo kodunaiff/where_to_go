@@ -152,7 +152,9 @@ cython_debug/
 .idea/
 .idea/.name
 media/
-prov_2.py
+prov2.py
+prov3.py
+prov4.py
 new_parse.py
 main3.py
 parse_2.py
