@@ -1,6 +1,7 @@
 from django.db import models
 from tinymce.models import HTMLField
 
+
 class Place(models.Model):
     title = models.CharField(verbose_name="Название", max_length=250, unique=True)
     description_short = models.TextField(verbose_name="Короткое описание", max_length=500, blank=True)
