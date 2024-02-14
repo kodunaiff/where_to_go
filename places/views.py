@@ -1,9 +1,8 @@
-from django.core.serializers import json
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, JsonResponse
-from django.template import loader
-from .models import Place
 from django.urls import reverse
+
+from .models import Place
 
 
 def show_places(request):
