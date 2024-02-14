@@ -22,7 +22,7 @@ class ImageInline(SortableTabularInline):
 @admin.register(Place)
 class PlaceAdmin(SortableAdminBase, admin.ModelAdmin):
     list_display = (
-        'title', 'description_short',
+        'id', 'title', 'short_description',
         'lat', 'lng',
     )
 
