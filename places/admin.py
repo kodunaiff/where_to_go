@@ -4,6 +4,9 @@ from django.utils.html import format_html
 
 from .models import Place, Image
 
+MAX_WIDTH = 150
+MAX_HEIGHT = 100
+
 
 class ImageInline(SortableTabularInline):
     model = Image
@@ -14,7 +17,10 @@ class ImageInline(SortableTabularInline):
     def get_preview(self, obj):
         if not obj.img:
             return format_html('нет изображения')
-        return format_html('<img src="{}" style="max-width:150px; max-height:100px;">', obj.img.url)
+        return format_html(
+            '<img src="{}" style="max-width:{}px; max-height:{}px;">',
+            obj.img.url, MAX_WIDTH, MAX_HEIGHT
+        )
 
     get_preview.short_description = 'preview'
 
