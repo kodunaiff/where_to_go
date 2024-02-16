@@ -6,7 +6,7 @@ from environs import Env
 env = Env()
 env.read_env()
 
-INTERNAL_IPS = ["127.0.0.1",]
+INTERNAL_IPS = ["127.0.0.1"]
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env.str('SECRET_KEY')
@@ -25,12 +25,8 @@ INSTALLED_APPS = [
     'places.apps.PlacesConfig',
     'adminsortable2',
     'tinymce',
-
-] + (
-    [
-        'debug_toolbar',    # https://github.com/jazzband/django-debug-toolbar
-    ] if DEBUG else []
-)
+    'debug_toolbar',
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -40,12 +36,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-]+ (
-    [
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
-    ] if DEBUG else []
-)
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
 
 ROOT_URLCONF = 'where_to_go.urls'
 
@@ -96,18 +88,10 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-#STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-#STATICFILES_DIRS = [
-#    os.path.join(BASE_DIR, 'static/'),
-#]
-
-if DEBUG:
-    STATIC_ROOT = os.path.join(BASE_DIR, "static")
-    STATICFILES_DIRS = [
-        # STATIC_ROOT,
-    ]
-else:
-    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static/'),
+]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = ''

@@ -7,34 +7,30 @@ from .models import Place
 
 def show_places(request):
     places = Place.objects.all()
-    features = []
-    for place in places:
-        points = {}
-        points['type'] = 'Feature'
-        points['geometry'] = {
-            "type": "Point",
-            "coordinates": [place.lng, place.lat]
-        }
-        points['properties'] = {
-            "title": place.title,
-            "placeId": "moscow_legends",
-            "detailsUrl": reverse("show_place_id", kwargs={"place_id": place.id})
-        }
-        features.append(points)
 
     contex = {
-        "type": "FeatureCollection",
-        "features": features
+        'type': 'FeatureCollection',
+        'features': [
+            {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [place.lng, place.lat]
+                },
+                'properties': {
+                    'title': place.title,
+                    'placeId': place.id,
+                    'detailsUrl': reverse('show_place_id', kwargs={'place_id': place.id})
+                }
+            }
+            for place in places
+        ]
     }
-
     return render(request, 'index.html', {'places_geojson': contex})
 
 
 def show_place_id(request, place_id):
-    place = get_object_or_404(Place, id=place_id)
-    #place = get_object_or_404(Place.objects.prefetch_related('places'), id=place_id)
-
-    #place = get_object_or_404(Place, id=place_id)
+    place = get_object_or_404(Place.objects.prefetch_related('places'), id=place_id)
     place_imgs = [image.img.url for image in place.places.all()]
     response_place = {
         'title': place.title,
@@ -47,6 +43,4 @@ def show_place_id(request, place_id):
         }
     }
 
-
-    return JsonResponse(response_place, safe=False, json_dumps_params={'ensure_ascii': False, 'indent': 2} )
-
+    return JsonResponse(response_place, safe=False, json_dumps_params={'ensure_ascii': False, 'indent': 2})
