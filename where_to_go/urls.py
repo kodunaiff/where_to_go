@@ -10,4 +10,5 @@ urlpatterns = [
     path('', show_places),
     path('place/<int:place_id>/', show_place_id, name='show_place_id'),
     path('tinymce/', include('tinymce.urls')),
+    path('__debug__/', include('debug_toolbar.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

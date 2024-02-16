@@ -6,6 +6,8 @@ from environs import Env
 env = Env()
 env.read_env()
 
+INTERNAL_IPS = ["127.0.0.1"]
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env.str('SECRET_KEY')
 DEBUG = env.bool('DEBUG', default=True)
@@ -23,6 +25,7 @@ INSTALLED_APPS = [
     'places.apps.PlacesConfig',
     'adminsortable2',
     'tinymce',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -33,6 +36,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'where_to_go.urls'
