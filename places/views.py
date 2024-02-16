@@ -31,7 +31,9 @@ def show_places(request):
 
 
 def show_place_id(request, place_id):
-    place = get_object_or_404(Place.objects.prefetch_related('places'), id=place_id)
+    place = get_object_or_404(Place, id=place_id)
+    #place = get_object_or_404(Place.objects.prefetch_related('places'), id=place_id)
+
     #place = get_object_or_404(Place, id=place_id)
     place_imgs = [image.img.url for image in place.places.all()]
     response_place = {
@@ -45,4 +47,6 @@ def show_place_id(request, place_id):
         }
     }
 
-    return JsonResponse(response_place, safe=False, json_dumps_params={'ensure_ascii': False, 'indent': 2})
+
+    return JsonResponse(response_place, safe=False, json_dumps_params={'ensure_ascii': False, 'indent': 2} )
+
