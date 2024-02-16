@@ -18,7 +18,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             for url in options['link']:
-                place, imgs_url = add_place(url)
+                place, imgs_url, created = add_place(url)
+                if not created:
+                    logging.warning('данная локация уже в базе')
+                    continue
+
                 for url_number, img_url in enumerate(imgs_url, 1):
                     img_name = img_url.split('/')[-1]
                     img_num = url_number
@@ -43,12 +47,14 @@ def add_place(url):
     raw_place = response.json()
     place, created = Place.objects.get_or_create(
         title=raw_place['title'],
-        short_description=raw_place['description_short'],
-        long_description=raw_place['description_long'],
         lat=raw_place['coordinates']['lat'],
         lng=raw_place['coordinates']['lng'],
+        defaults={
+            'short_description': raw_place['description_short'],
+            'long_description': raw_place['description_long'],
+        },
     )
-    return place, raw_place['imgs']
+    return place, raw_place['imgs'], created
 
 
 def get_img(place, img_url, img_num, img_name):
