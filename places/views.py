@@ -8,7 +8,7 @@ from .models import Place
 def show_places(request):
     places = Place.objects.all()
 
-    contex = {
+    places_geojson = {
         'type': 'FeatureCollection',
         'features': [
             {
@@ -26,7 +26,8 @@ def show_places(request):
             for place in places
         ]
     }
-    return render(request, 'index.html', {'places_geojson': contex})
+    context = {"places_geojson": places_geojson}
+    return render(request, 'index.html', context)
 
 
 def show_place_id(request, place_id):

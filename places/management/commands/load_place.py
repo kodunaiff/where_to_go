@@ -40,15 +40,15 @@ class Command(BaseCommand):
 def add_place(url):
     response = requests.get(url)
     response.raise_for_status()
-    place = response.json()
-    obj, created = Place.objects.get_or_create(
-        title=place['title'],
-        description_short=place['description_short'],
-        description_long=place['description_long'],
-        lat=place['coordinates']['lat'],
-        lng=place['coordinates']['lng'],
+    raw_place = response.json()
+    place, created = Place.objects.get_or_create(
+        title=raw_place['title'],
+        short_description=raw_place['description_short'],
+        long_description=raw_place['description_long'],
+        lat=raw_place['coordinates']['lat'],
+        lng=raw_place['coordinates']['lng'],
     )
-    return obj, place['imgs']
+    return place, raw_place['imgs']
 
 
 def get_img(place, img_url, img_num, img_name):
