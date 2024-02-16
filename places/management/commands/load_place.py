@@ -18,15 +18,15 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             for url in options['link']:
-                place, imgs_url, created = add_place(url)
+                place, img_urls, created = add_place(url)
                 if not created:
                     logging.warning('данная локация уже в базе')
                     continue
 
-                for url_number, img_url in enumerate(imgs_url, 1):
+                for url_number, img_url in enumerate(img_urls, 1):
                     img_name = img_url.split('/')[-1]
                     img_num = url_number
-                    get_img(place, img_url, img_num, img_name)
+                    fetch_img(place, img_url, img_num, img_name)
 
         except TypeError:
             logging.warning('Вы не передали ссылку на объект')
@@ -57,7 +57,7 @@ def add_place(url):
     return place, raw_place['imgs'], created
 
 
-def get_img(place, img_url, img_num, img_name):
+def fetch_img(place, img_url, img_num, img_name):
     response = requests.get(img_url)
     response.raise_for_status()
     Image.objects.create(
