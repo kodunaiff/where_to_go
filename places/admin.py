@@ -14,6 +14,10 @@ class ImageInline(SortableTabularInline):
     fields = ['img', 'get_preview', 'number_pic']
     extra = 2
 
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request).select_related('place')
+        return queryset
+
     def get_preview(self, image):
         if not image.img:
             return format_html('нет изображения')
